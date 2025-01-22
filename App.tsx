@@ -1,12 +1,8 @@
 import {View, Text, StyleSheet} from 'react-native';
 import TodoInput from './src/components/TodoInput';
 import {useState} from 'react';
-
-interface Todo {
-  id: string;
-  text: string;
-  completed: boolean;
-}
+import {Todo} from './src/types';
+import TodoList from './src/components/TodoList';
 
 const App = (): React.JSX.Element => {
   const [todoList, setTodoList] = useState<Todo[]>([]);
@@ -22,10 +18,15 @@ const App = (): React.JSX.Element => {
     ]);
   };
 
+  const deleteTodo = (id: string) => {
+    setTodoList(todoList.filter(item => item.id !== id));
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Todo App</Text>
       <TodoInput onAddTodo={addTodo} />
+      <TodoList todoList={todoList} onDeleteTodo={deleteTodo} />
     </View>
   );
 };
