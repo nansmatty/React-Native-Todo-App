@@ -6,16 +6,25 @@ import TodoItem from './TodoItem';
 interface TodoListProps {
   todoList: Todo[];
   onDeleteTodo: (id: string) => void;
+  onToggleTodo: (id: string) => void;
+  onEditTodo: (id: string, newText: string) => void;
 }
 
-const TodoList: React.FC<TodoListProps> = ({todoList, onDeleteTodo}) => {
+const TodoList: React.FC<TodoListProps> = ({
+  todoList,
+  onDeleteTodo,
+  onToggleTodo,
+  onEditTodo,
+}) => {
   return (
     <ScrollView style={styles.container}>
       {todoList.map(todo => (
         <TodoItem
-          key={todo.id}
+          key={todo?.id}
           todoItem={todo}
-          onDelete={() => onDeleteTodo(todo.id)}
+          onDelete={() => onDeleteTodo(todo?.id)}
+          onToggle={() => onToggleTodo(todo?.id)}
+          onEdit={(newText: string) => onEditTodo(todo?.id, newText)}
         />
       ))}
     </ScrollView>

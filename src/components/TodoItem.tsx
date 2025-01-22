@@ -1,24 +1,52 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {Todo} from '../types';
+import TodoEdit from './TodoEdit';
 
 interface TodoItemProps {
   todoItem: Todo;
   onDelete: () => void;
+  onToggle: () => void;
+  onEdit: (newText: string) => void;
 }
 
-const TodoItem: React.FC<TodoItemProps> = ({todoItem, onDelete}) => {
+const TodoItem: React.FC<TodoItemProps> = ({
+  todoItem,
+  onDelete,
+  onToggle,
+  onEdit,
+}) => {
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleEdit = (newText: string) => {
+    onEdit(newText);
+  };
+
+  if (isEditing) {
+    return (
+      <TodoEdit
+        todo={todoItem}
+        onSave={handleEdit}
+        onCancel={() => setIsEditing(prev => !prev)}
+      />
+    );
+  }
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.todoText}>
+      <TouchableOpacity onPress={onToggle} style={styles.todoText}>
         <Text style={[styles.text, todoItem.completed && styles.completedText]}>
           {todoItem.text}
         </Text>
       </TouchableOpacity>
       <View style={styles.btnContainer}>
-        <TouchableOpacity style={[styles.btn, {backgroundColor: '#ca8a04'}]}>
-          <Text style={styles.btnText}>Edit</Text>
-        </TouchableOpacity>
+        {!todoItem.completed && (
+          <TouchableOpacity
+            onPress={() => setIsEditing(prev => !prev)}
+            style={[styles.btn, {backgroundColor: '#ca8a04'}]}>
+            <Text style={styles.btnText}>Edit</Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity
           onPress={onDelete}
           style={[styles.btn, {backgroundColor: '#e11d48'}]}>

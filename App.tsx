@@ -22,11 +22,30 @@ const App = (): React.JSX.Element => {
     setTodoList(todoList.filter(item => item.id !== id));
   };
 
+  const toggleTodo = (id: string) => {
+    setTodoList(
+      todoList.map(item =>
+        item.id === id ? {...item, completed: !item.completed} : item,
+      ),
+    );
+  };
+
+  const editTodo = (id: string, newText: string) => {
+    setTodoList(
+      todoList.map(item => (item.id === id ? {...item, text: newText} : item)),
+    );
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Todo App</Text>
       <TodoInput onAddTodo={addTodo} />
-      <TodoList todoList={todoList} onDeleteTodo={deleteTodo} />
+      <TodoList
+        todoList={todoList}
+        onToggleTodo={toggleTodo}
+        onDeleteTodo={deleteTodo}
+        onEditTodo={editTodo}
+      />
     </View>
   );
 };
